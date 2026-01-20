@@ -1,0 +1,23 @@
+# data
+data/
+outputs/
+models/
+*.zip
+
+# python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# notebooks
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+.Rhistory

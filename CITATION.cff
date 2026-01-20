@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "Heavy Metals Risk Modeling (RASFF-style) — ML + ANN pipelines"
+message: "If you use this software, please cite it."
+type: software
+authors:
+  - family-names: "Cioroiu"
+    given-names: "Bogdan"
+version: 0.1.0
+date-released: "2026-01-08"
+license: MIT
+repository-code: "REPLACE_WITH_YOUR_GITHUB_REPO_URL"
+keywords:
+  - food-safety
+  - heavy-metals
+  - machine-learning
+  - neural-networks
+  - risk-classification

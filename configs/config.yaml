@@ -1,0 +1,32 @@
+seed: 42
+
+columns:
+  target_multiclass: "Risk_decision"
+  target_regression: "Conc"
+  metal_column: "Metal"
+
+  categorical:
+    - "Metal"
+    - "Product_category"
+    - "Notified_by"
+    - "Origin"
+
+  # Optional numeric columns; if empty, pipeline auto-detects numeric columns
+  numeric: []
+
+models:
+  classification:
+    estimator: "random_forest"
+    random_forest:
+      n_estimators: 600
+      max_depth: null
+      class_weight: "balanced_subsample"
+
+  regression:
+    ann:
+      epochs: 80
+      batch_size: 64
+      learning_rate: 0.001
+      hidden_units: [128, 64, 32]
+      dropout: 0.15
+      patience: 12
