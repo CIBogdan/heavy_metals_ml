@@ -49,9 +49,7 @@ def train_ann_regression(
     mask = y.notna()
     X, y = X.loc[mask], y.loc[mask]
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=seed
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=seed)
 
     prep = build_preprocessor(spec)
     X_train_t = prep.fit_transform(X_train)
@@ -68,7 +66,9 @@ def train_ann_regression(
 
     callbacks = [
         tf.keras.callbacks.EarlyStopping(
-            monitor="val_loss", patience=int(ann_params.get("patience", 12)), restore_best_weights=True
+            monitor="val_loss",
+            patience=int(ann_params.get("patience", 12)),
+            restore_best_weights=True,
         )
     ]
 

@@ -15,7 +15,9 @@ def run_dir(out_root: str | Path) -> Path:
     return out_root / stamp
 
 
-def load_config_and_data(config_path: str | Path, data_path: str | Path) -> tuple[AppConfig, pd.DataFrame]:
+def load_config_and_data(
+    config_path: str | Path, data_path: str | Path
+) -> tuple[AppConfig, pd.DataFrame]:
     cfg = AppConfig.from_yaml(config_path)
     df = read_csv(data_path)
     return cfg, df

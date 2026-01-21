@@ -46,7 +46,9 @@ def main() -> None:
 
     labels = list(res.report.keys())
     labels = [x for x in labels if x not in ("accuracy", "macro avg", "weighted avg")]
-    plot_confusion_matrix(res.confusion_matrix, labels, out / "cm_multiclass.png", "Confusion Matrix — Multi-class")
+    plot_confusion_matrix(
+        res.confusion_matrix, labels, out / "cm_multiclass.png", "Confusion Matrix — Multi-class"
+    )
 
     print(f"Saved outputs to: {out}")
 

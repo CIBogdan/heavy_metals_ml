@@ -42,14 +42,16 @@ from sklearn.preprocessing import OneHotEncoder
 
 
 def set_mpl_defaults():
-    plt.rcParams.update({
-        "figure.dpi": 120,
-        "savefig.dpi": 300,
-        "font.size": 10,
-        "axes.titlesize": 11,
-        "axes.labelsize": 10,
-        "legend.fontsize": 9,
-    })
+    plt.rcParams.update(
+        {
+            "figure.dpi": 120,
+            "savefig.dpi": 300,
+            "font.size": 10,
+            "axes.titlesize": 11,
+            "axes.labelsize": 10,
+            "legend.fontsize": 9,
+        }
+    )
 
 
 def ensure_dir(p: Path) -> None:
@@ -93,7 +95,9 @@ def coerce_binary(y: pd.Series) -> pd.Series | None:
         return mapped.astype("Int64")
 
     if yy_str.str.contains("serious").any():
-        return yy_str.apply(lambda s: 1 if ("serious" in s and "not" not in s) else 0).astype("Int64")
+        return yy_str.apply(lambda s: 1 if ("serious" in s and "not" not in s) else 0).astype(
+            "Int64"
+        )
 
     return None
 
@@ -102,14 +106,18 @@ def build_preprocessor(X: pd.DataFrame) -> tuple[ColumnTransformer, list[str], l
     numeric_cols = [c for c in X.columns if pd.api.types.is_numeric_dtype(X[c])]
     categorical_cols = [c for c in X.columns if c not in numeric_cols]
 
-    numeric_tf = Pipeline(steps=[
-        ("imputer", SimpleImputer(strategy="median")),
-    ])
+    numeric_tf = Pipeline(
+        steps=[
+            ("imputer", SimpleImputer(strategy="median")),
+        ]
+    )
 
-    cat_tf = Pipeline(steps=[
-        ("imputer", SimpleImputer(strategy="most_frequent")),
-        ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
-    ])
+    cat_tf = Pipeline(
+        steps=[
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
+        ]
+    )
 
     pre = ColumnTransformer(
         transformers=[
@@ -130,13 +138,21 @@ def get_feature_names(preprocessor: ColumnTransformer) -> list[str]:
         return []
 
 
-def run_classification(df: pd.DataFrame, outdir: Path, seed: int, test_size: float) -> dict[str, str]:
+def run_classification(
+    df: pd.DataFrame, outdir: Path, seed: int, test_size: float
+) -> dict[str, str]:
     cls_dir = outdir / "classification"
     ensure_dir(cls_dir)
 
-    y_multi_col = find_first_existing(df, ["Risk_decision", "risk_decision", "Decision", "decision", "Class", "class"])
-    y_bin_col = find_first_existing(df, ["Risk_binary", "risk_binary", "Serious", "serious", "Binary", "binary"])
-    conc_col = find_first_existing(df, ["Conc", "conc", "Concentration", "concentration", "Value", "value"])
+    y_multi_col = find_first_existing(
+        df, ["Risk_decision", "risk_decision", "Decision", "decision", "Class", "class"]
+    )
+    y_bin_col = find_first_existing(
+        df, ["Risk_binary", "risk_binary", "Serious", "serious", "Binary", "binary"]
+    )
+    conc_col = find_first_existing(
+        df, ["Conc", "conc", "Concentration", "concentration", "Value", "value"]
+    )
 
     exclude = set([c for c in [y_multi_col, y_bin_col, conc_col] if c is not None])
     X = df.drop(columns=list(exclude), errors="ignore").copy()
@@ -236,7 +252,11 @@ def run_classification(df: pd.DataFrame, outdir: Path, seed: int, test_size: flo
     names = get_feature_names(pre_fitted)
     importances = pipe.named_steps["clf"].feature_importances_
     if len(names) == len(importances):
-        fi = pd.DataFrame({"feature": names, "importance": importances}).sort_values("importance", ascending=False).head(25)
+        fi = (
+            pd.DataFrame({"feature": names, "importance": importances})
+            .sort_values("importance", ascending=False)
+            .head(25)
+        )
         fig, ax = plt.subplots(figsize=(7.6, 6.4))
         ax.barh(fi["feature"][::-1], fi["importance"][::-1])
         ax.set_title("RF Feature Importance (Top 25)")
@@ -253,7 +273,9 @@ def run_regression(df: pd.DataFrame, outdir: Path, seed: int, test_size: float) 
     reg_dir = outdir / "regression"
     ensure_dir(reg_dir)
 
-    conc_col = find_first_existing(df, ["Conc", "conc", "Concentration", "concentration", "Value", "value"])
+    conc_col = find_first_existing(
+        df, ["Conc", "conc", "Concentration", "concentration", "Value", "value"]
+    )
     if conc_col is None:
         raise RuntimeError("Concentration column not found (expected 'Conc' or similar).")
 
@@ -261,8 +283,12 @@ def run_regression(df: pd.DataFrame, outdir: Path, seed: int, test_size: float) 
 
     exclude = {conc_col}
     for c in [
-        find_first_existing(df, ["Risk_decision", "risk_decision", "Decision", "decision", "Class", "class"]),
-        find_first_existing(df, ["Risk_binary", "risk_binary", "Serious", "serious", "Binary", "binary"]),
+        find_first_existing(
+            df, ["Risk_decision", "risk_decision", "Decision", "decision", "Class", "class"]
+        ),
+        find_first_existing(
+            df, ["Risk_binary", "risk_binary", "Serious", "serious", "Binary", "binary"]
+        ),
     ]:
         if c is not None:
             exclude.add(c)
@@ -278,7 +304,9 @@ def run_regression(df: pd.DataFrame, outdir: Path, seed: int, test_size: float) 
     pre, _, _ = build_preprocessor(X_all)
 
     def fit_one(X: pd.DataFrame, y: pd.Series, label: str):
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=seed)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=test_size, random_state=seed
+        )
 
         reg = MLPRegressor(
             hidden_layer_sizes=(128, 64),
