@@ -19,7 +19,7 @@ This project implements supervised classification and artificial neural network 
 ## Example output
 
 <p align="center">
-  <img src="outputs/paper_figures/classification/confusion_binary.png" width="600">
+  <img src="docs/confusion_binary.png" width="600">
 </p>
 
 *Example: binary risk classification performance for heavy-metal notifications.*
