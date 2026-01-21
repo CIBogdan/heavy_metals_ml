@@ -4,7 +4,7 @@ A clean, reproducible Data Science repository for:
 - **Risk classification** (multi-class + binary “serious vs not serious”) from notification-style records
 - **Concentration regression** (`Conc`) **per metal** using **ANN** with tabular predictors
 
-Designed to look good to **recruiters** (modular code, CLI, tests, CI-ready) and to be usable **academically**
+Designed to **recruiters** (modular code, CLI, tests, CI-ready) and to be usable **academically**
 (reproducible pipelines, data statement, citation metadata).
 
 ---
