@@ -18,29 +18,27 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from typing import List, Optional, Tuple, Dict
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-
-from sklearn.model_selection import train_test_split
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.impute import SimpleImputer
 from sklearn.metrics import (
-    confusion_matrix,
     ConfusionMatrixDisplay,
-    roc_curve,
-    auc,
     RocCurveDisplay,
+    auc,
+    confusion_matrix,
     mean_absolute_error,
     mean_squared_error,
     r2_score,
+    roc_curve,
 )
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.impute import SimpleImputer
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPRegressor
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
 
 
 def set_mpl_defaults():
@@ -58,7 +56,7 @@ def ensure_dir(p: Path) -> None:
     p.mkdir(parents=True, exist_ok=True)
 
 
-def find_first_existing(df: pd.DataFrame, candidates: List[str]) -> Optional[str]:
+def find_first_existing(df: pd.DataFrame, candidates: list[str]) -> str | None:
     cols = {c.lower(): c for c in df.columns}
     for cand in candidates:
         if cand.lower() in cols:
@@ -66,7 +64,7 @@ def find_first_existing(df: pd.DataFrame, candidates: List[str]) -> Optional[str
     return None
 
 
-def coerce_binary(y: pd.Series) -> Optional[pd.Series]:
+def coerce_binary(y: pd.Series) -> pd.Series | None:
     if y is None:
         return None
     yy = y.copy()
@@ -100,7 +98,7 @@ def coerce_binary(y: pd.Series) -> Optional[pd.Series]:
     return None
 
 
-def build_preprocessor(X: pd.DataFrame) -> Tuple[ColumnTransformer, List[str], List[str]]:
+def build_preprocessor(X: pd.DataFrame) -> tuple[ColumnTransformer, list[str], list[str]]:
     numeric_cols = [c for c in X.columns if pd.api.types.is_numeric_dtype(X[c])]
     categorical_cols = [c for c in X.columns if c not in numeric_cols]
 
@@ -124,7 +122,7 @@ def build_preprocessor(X: pd.DataFrame) -> Tuple[ColumnTransformer, List[str], L
     return pre, numeric_cols, categorical_cols
 
 
-def get_feature_names(preprocessor: ColumnTransformer) -> List[str]:
+def get_feature_names(preprocessor: ColumnTransformer) -> list[str]:
     try:
         names = preprocessor.get_feature_names_out()
         return [str(n) for n in names]
@@ -132,7 +130,7 @@ def get_feature_names(preprocessor: ColumnTransformer) -> List[str]:
         return []
 
 
-def run_classification(df: pd.DataFrame, outdir: Path, seed: int, test_size: float) -> Dict[str, str]:
+def run_classification(df: pd.DataFrame, outdir: Path, seed: int, test_size: float) -> dict[str, str]:
     cls_dir = outdir / "classification"
     ensure_dir(cls_dir)
 
@@ -251,7 +249,7 @@ def run_classification(df: pd.DataFrame, outdir: Path, seed: int, test_size: flo
     return used
 
 
-def run_regression(df: pd.DataFrame, outdir: Path, seed: int, test_size: float) -> Dict[str, str]:
+def run_regression(df: pd.DataFrame, outdir: Path, seed: int, test_size: float) -> dict[str, str]:
     reg_dir = outdir / "regression"
     ensure_dir(reg_dir)
 

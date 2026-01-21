@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -13,11 +12,11 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 @dataclass(frozen=True)
 class FeatureSpec:
-    categorical: List[str]
-    numeric: List[str]
+    categorical: list[str]
+    numeric: list[str]
 
 
-def infer_numeric_columns(df: pd.DataFrame, exclude: List[str]) -> List[str]:
+def infer_numeric_columns(df: pd.DataFrame, exclude: list[str]) -> list[str]:
     numeric = df.select_dtypes(include=[np.number]).columns.tolist()
     return [c for c in numeric if c not in exclude]
 
@@ -51,7 +50,7 @@ def make_xy(
     df: pd.DataFrame,
     target: str,
     spec: FeatureSpec,
-) -> Tuple[pd.DataFrame, pd.Series]:
+) -> tuple[pd.DataFrame, pd.Series]:
     X = df[spec.categorical + spec.numeric].copy()
     y = df[target].copy()
     return X, y

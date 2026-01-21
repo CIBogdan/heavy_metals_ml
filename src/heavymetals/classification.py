@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Tuple
 
 import numpy as np
 import pandas as pd
@@ -16,7 +15,7 @@ from .preprocessing import FeatureSpec, build_preprocessor, make_xy
 
 @dataclass(frozen=True)
 class ClassificationResults:
-    report: Dict
+    report: dict
     confusion_matrix: np.ndarray
     macro_f1: float
 
@@ -26,8 +25,8 @@ def train_random_forest_multiclass(
     target: str,
     spec: FeatureSpec,
     seed: int,
-    rf_params: Dict,
-) -> Tuple[Pipeline, ClassificationResults]:
+    rf_params: dict,
+) -> tuple[Pipeline, ClassificationResults]:
     X, y = make_xy(df, target, spec)
 
     X_train, X_test, y_train, y_test = train_test_split(

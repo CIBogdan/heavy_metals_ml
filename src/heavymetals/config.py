@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import yaml
 
@@ -12,15 +12,15 @@ class ColumnConfig:
     target_multiclass: str
     target_regression: str
     metal_column: str
-    categorical: List[str]
-    numeric: List[str]
+    categorical: list[str]
+    numeric: list[str]
 
 
 @dataclass(frozen=True)
 class RFConfig:
     n_estimators: int = 600
-    max_depth: Optional[int] = None
-    class_weight: Optional[str] = "balanced_subsample"
+    max_depth: int | None = None
+    class_weight: str | None = "balanced_subsample"
 
 
 @dataclass(frozen=True)
@@ -28,7 +28,7 @@ class ANNConfig:
     epochs: int = 80
     batch_size: int = 64
     learning_rate: float = 1e-3
-    hidden_units: List[int] = None  # type: ignore
+    hidden_units: list[int] = None  # type: ignore
     dropout: float = 0.15
     patience: int = 12
 
@@ -41,9 +41,9 @@ class AppConfig:
     ann: ANNConfig
 
     @staticmethod
-    def from_yaml(path: str | Path) -> "AppConfig":
+    def from_yaml(path: str | Path) -> AppConfig:
         p = Path(path)
-        data: Dict[str, Any] = yaml.safe_load(p.read_text(encoding="utf-8"))
+        data: dict[str, Any] = yaml.safe_load(p.read_text(encoding="utf-8"))
 
         cols = data["columns"]
         col_cfg = ColumnConfig(

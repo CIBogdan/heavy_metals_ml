@@ -2,9 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Tuple
 
-import numpy as np
 import pandas as pd
 import tensorflow as tf
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
@@ -44,8 +42,8 @@ def train_ann_regression(
     target: str,
     spec: FeatureSpec,
     seed: int,
-    ann_params: Dict,
-) -> Tuple[Pipeline, tf.keras.Model, RegressionResults, tf.keras.callbacks.History]:
+    ann_params: dict,
+) -> tuple[Pipeline, tf.keras.Model, RegressionResults, tf.keras.callbacks.History]:
     X, y = make_xy(df, target, spec)
     y = pd.to_numeric(y, errors="coerce")
     mask = y.notna()

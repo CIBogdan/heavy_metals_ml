@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Iterable, List
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-def plot_confusion_matrix(cm: np.ndarray, labels: List[str], outpath: str | Path, title: str) -> None:
+def plot_confusion_matrix(cm: np.ndarray, labels: list[str], outpath: str | Path, title: str) -> None:
     out = Path(outpath)
     out.parent.mkdir(parents=True, exist_ok=True)
 
