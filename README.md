@@ -1,108 +1,36 @@
-# Heavy Metals Risk Modeling — ML classification + ANN regression
+# Heavy Metals Risk Analysis with Machine Learning
 
-A clean, reproducible Data Science repository for:
-- **Risk classification** (multi-class + binary “serious vs not serious”) from notification-style records
-- **Concentration regression** (`Conc`) **per metal** using **ANN** with tabular predictors
+End-to-end machine learning pipelines for heavy-metal contamination analysis and risk classification, designed for reproducible scientific research and applied environmental and food safety risk assessment.
 
-Designed to **recruiters** (modular code, CLI, tests, CI-ready) and to be usable **academically**
-(reproducible pipelines, data statement, citation metadata).
+This project implements supervised classification and artificial neural network (ANN) regression models for the analysis of heavy-metal contamination patterns (e.g., Pb, Cd, Hg, As) in regulatory alert-style datasets.
 
 ---
 
-## What this project does
+## Key features
 
-### 1) Classification
-Given structured notification records (e.g., metal, product category, notifier, origin + numeric indices),
-the pipeline trains:
-- a **multi-class** model (RandomForest by default) for `Risk_decision`
-- an optional **binary** model for **serious** risk (derived from labels)
-
-Outputs:
-- metrics (accuracy / F1 / confusion matrices)
-- trained models (`joblib`)
-- plots (PNG)
-
-### 2) Regression (per metal)
-For each selected metal (e.g., Pb/Cd/Hg/As), the pipeline trains an **ANN** to predict:
-- `Conc` (concentration)
-
-Outputs:
-- metrics (MAE / RMSE / R²)
-- learning curves
-- saved Keras models
+• Supervised machine learning for heavy-metal risk classification (binary and multi-class)  
+• ANN regression models for concentration prediction across multiple metals  
+• Feature importance and model interpretability tools  
+• Automated generation of paper-ready figures (300 dpi)  
+• CI-stable, reproducible research workflow (ruff, black, pytest, GitHub Actions)  
 
 ---
 
-## Repository structure
+## Example output
 
-```
-heavy-metals-ml/
-  src/heavymetals/             # reusable package (pip install -e .)
-  scripts/                     # CLI entry points (thin wrappers)
-  notebooks/                   # demo notebook + original colab
-  tests/                       # minimal unit tests
-  docs/                        # academic notes + pipeline figure
-  outputs/                     # generated (gitignored)
-  data/                        # local datasets (gitignored)
-```
+<p align="center">
+  <img src="outputs/paper_figures/classification/confusion_binary.png" width="600">
+</p>
 
----
-
-## Quickstart
-
-### 1) Create environment
-```bash
-python -m venv .venv
-# Windows: .venv\Scripts\activate
-source .venv/bin/activate
-
-pip install -r requirements.txt
-pip install -e .
-```
-
-### 2) Put your dataset locally
-Place a CSV at:
-```
-data/df_clean.csv
-```
-
-Your file should contain at minimum:
-- `Metal`, `Product_category`, `Notified_by`, `Origin`
-- `Risk_decision` (for classification)
-- `Conc` (for regression)
-
-### 3) Train classification
-```bash
-heavymetals-train-cls --data data/df_clean.csv --out outputs/classification
-```
-
-### 4) Train regression (per metal)
-```bash
-heavymetals-train-reg --data data/df_clean.csv --out outputs/regression --metals Pb Cd Hg As
-```
+*Example: binary risk classification performance for heavy-metal notifications.*
 
 ---
 
 ## Reproducibility
 
-- All random seeds are controlled via `config.yaml` (see `configs/`).
-- Outputs are versioned by timestamped run folders.
-- Models and encoders are persisted.
+The dataset used in this study is **not distributed** with the repository due to data-sharing constraints.
 
----
+To reproduce the analyses and generate all paper-ready figures (300 dpi), provide the local dataset path and run:
 
-## Data statement
-
-This repository intentionally **does not** ship the dataset.
-If you use RASFF-derived or proprietary datasets, follow your license / GDPR / institutional policy.
-
----
-
-## How to cite
-
-A `CITATION.cff` is included. On GitHub, it will appear under **“Cite this repository”**.
-
----
-
-## License
-MIT (see `LICENSE`).
+```bash
+python scripts/make_paper_figures.py --data PATH/TO/df_clean.csv
